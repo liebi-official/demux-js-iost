@@ -1,0 +1,17 @@
+{
+  "name": "demux-iost-example",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": {
+    "name": "Edwin Wang",
+    "url": "https://liebi.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "demux": "^4.0.0",
+    "demux-iost": "^1.0.0"
+  }
+}
