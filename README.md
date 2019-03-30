@@ -1,4 +1,4 @@
-# demux-js-iost
+# demux-js-iost [![Build Status](https://travis-ci.org/liebi-official/demux-js-iost.svg?branch=master)](https://travis-ci.org/liebi-official/demux-js-iost)
 
 Demux Action Reader implementations to read block and action data from IOST-based blockchains. 
 
