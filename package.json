@@ -1,10 +1,10 @@
 {
   "name": "demux-iost",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Demux-js Action Reader implementations for IOST blockchains",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/liebi-office/demux-js-iost",
+  "repository": "https://github.com/liebi-official/demux-js-iost",
   "author": {
     "name": "Edwin Wang",
     "url": "https://liebi.com"
