@@ -19,7 +19,8 @@ describe('IostBlock', () => {
           contract: 'token.iost',
           actionName: 'issue',
           content: ['contribute', 'chronus', '2.02794405'],
-          actions: [{action_name: 'exec', contract: 'base.iost', data: '[{\"parent\":[\"8XoWNnLnP9hpnyZLsxqzC356V1vLvfecXWGtuFZ1yMSo\", \"0\", false]}]'}]
+          actions: [{action_name: 'exec', contract: 'base.iost',
+            data: '[{\"parent\":[\"8XoWNnLnP9hpnyZLsxqzC356V1vLvfecXWGtuFZ1yMSo\", \"0\", false]}]'}]
         },
         type: 'token.iost/issue',
       }
