@@ -31,6 +31,7 @@ export class IostBlock implements Block {
             payload: {
               producer,
               transactionId: transaction.hash,
+              timestamp: new Date(transaction.time / 1000000),
               receiptIndex,
               contract,
               actionName,

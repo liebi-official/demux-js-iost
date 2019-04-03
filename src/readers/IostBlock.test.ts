@@ -16,6 +16,7 @@ describe('IostBlock', () => {
           producer: '8XoWNnLnP9hpnyZLsxqzC356V1vLvfecXWGtuFZ1yMSo',
           transactionId: '31WpEckcUoqgNaZb7puiTsksgnqv2f59reVRsKYTDNEV',
           receiptIndex: 0,
+          timestamp: new Date(1549892311001348463 / 1000000),
           contract: 'token.iost',
           actionName: 'issue',
           content: ['contribute', 'chronus', '2.02794405'],
