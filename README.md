@@ -32,7 +32,7 @@ const actionReader = new IostActionReader({
   iostEndpoint: "https://api.iost.io"
 })
 
-const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, 0)
+const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, 250)
 
 actionWatcher.watch()
 
