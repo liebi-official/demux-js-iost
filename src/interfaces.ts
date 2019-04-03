@@ -6,9 +6,8 @@ export interface IostActionReaderOptions extends ActionReaderOptions {
 
 export interface IostPayload {
   account: string
-  actionIndex: number
-  data: any
-  name: string
+  receiptIndex: number
+  content: string
   producer: string
   transactionId: string
   notifiedAccounts?: string[]

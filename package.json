@@ -1,6 +1,6 @@
 {
   "name": "demux-iost",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Demux-js Action Reader implementations for IOST blockchains",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

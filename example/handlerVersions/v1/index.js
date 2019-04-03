@@ -25,7 +25,7 @@
 */
 
 function updateTransferData(state, payload, blockInfo, context) {
-  const [ symbol, from, to, amount, memo ] = JSON.parse(payload.data)
+  const [ symbol, from, to, amount, memo ] = payload.content
 
   if (!state.volumeBySymbol[symbol]) {
     state.volumeBySymbol[symbol] = Number(amount)
@@ -38,7 +38,7 @@ function updateTransferData(state, payload, blockInfo, context) {
 
 const updaters = [
   {
-    actionType: "token.iost::transfer",
+    actionType: "token.iost/transfer",
     apply: updateTransferData,
   },
 ]
@@ -61,7 +61,7 @@ function logUpdate(payload, blockInfo, context) {
 
 const effects = [
   {
-    actionType: "token.iost::transfer",
+    actionType: "token.iost/transfer",
     run: logUpdate,
   },
 ]

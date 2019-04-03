@@ -219,10 +219,10 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
-demux-iost@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/demux-iost/-/demux-iost-1.0.0.tgz#595dee0256b4a38516157994c276c38dabc3840b"
-  integrity sha512-7MXQnGjpzIsG9siYuZoR7Pn1bJo+nwTHgNExqGBEf3OOwKp2SVssjNZW716uXYmA+awa80QSjojSHtYg7mGAvQ==
+demux-iost@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/demux-iost/-/demux-iost-1.0.2.tgz#97ae57c7d9f04fccba7080b1d3119099778cf5be"
+  integrity sha512-WzSK4ymRQgvqjHITY/pCzFV6148vP/Mi8X5OCXx+SqVGQeCRPIgfglaRi+/38puDgwEEG/uY5lYhrrq1yFvs2Q==
   dependencies:
     "@types/express" "^4.16.1"
     bunyan "^1.8.12"

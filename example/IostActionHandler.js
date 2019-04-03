@@ -75,6 +75,14 @@ class IostActionHandler extends AbstractActionHandler {
     }
     state = stateHistory[blockNumber]
   }
+
+  matchActionType (candidateType, subscribedType) {
+    const [candidateContract, candidateAction] = candidateType.split('/')
+    const [subscribedContract, subscribedAction] = subscribedType.split('/')
+    const contractsMatch = candidateContract === subscribedContract || subscribedContract === '*'
+    const actionsMatch = candidateAction === subscribedAction || subscribedAction === '*'
+    return contractsMatch && actionsMatch
+  }
 }
 
 module.exports = IostActionHandler

@@ -14,23 +14,32 @@ export class IostBlock implements Block {
     }
   }
 
-  protected collectActionsFromBlock(rawBlock: any): IostAction[] {
+  protected collectActionsFromBlock(rawBlock: any): any[] {
     const producer = rawBlock.witness
     return this.flattenArray(rawBlock.transactions.map((transaction: any) => {
-      return transaction.actions.map((action: any, actionIndex: number) => {
-        const block = {
-          type: `${action.contract}::${action.action_name}`,
-          payload: {
-            receipt: transaction.tx_receipt,
-            producer,
-            transactionId: transaction.hash,
-            actionIndex,
-            ...action,
-          },
-        }
-
-        return block
-      })
+      return transaction.tx_receipt.status_code === 'SUCCESS' ? transaction.tx_receipt.receipts
+        .map((receipt: any, receiptIndex: number) => {
+          const [contract, actionName] = receipt.func_name.split('/')
+          let content
+          try {
+            content = JSON.parse(receipt.content)
+          } catch (e) {
+            content = receipt.content
+          }
+          const block = {
+            type: receipt.func_name,
+            payload: {
+              producer,
+              transactionId: transaction.hash,
+              receiptIndex,
+              contract,
+              actionName,
+              content,
+              actions: transaction.actions,
+            },
+          }
+          return block
+        }) : []
     }))
   }
 
