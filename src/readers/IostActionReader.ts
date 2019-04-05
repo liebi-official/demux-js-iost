@@ -26,7 +26,7 @@ export class IostActionReader extends AbstractActionReader {
   /**
    * Returns a promise for the head block number.
    */
-  public async getHeadBlockNumber(numRetries: number = 120, waitTimeMs: number = 250): Promise<number> {
+  public async getHeadBlockNumber(numRetries: number = 200, waitTimeMs: number = 250): Promise<number> {
     try {
       const blockNum = await retry(async () => {
         const blockInfo = await request.get({
@@ -41,7 +41,7 @@ export class IostActionReader extends AbstractActionReader {
     }
   }
 
-  public async getLastIrreversibleBlockNumber(numRetries: number = 120, waitTimeMs: number = 250): Promise<number> {
+  public async getLastIrreversibleBlockNumber(numRetries: number = 200, waitTimeMs: number = 250): Promise<number> {
     try {
       const irreversibleBlockNum = await retry(async () => {
         const blockInfo = await request.get({
@@ -60,7 +60,7 @@ export class IostActionReader extends AbstractActionReader {
   /**
    * Returns a promise for a `IostBlock`.
    */
-  public async getBlock(blockNumber: number, numRetries: number = 120, waitTimeMs: number = 250): Promise<IostBlock> {
+  public async getBlock(blockNumber: number, numRetries: number = 200, waitTimeMs: number = 250): Promise<IostBlock> {
     try {
       const block = await retry(async () => {
         const rawBlock = await request.get({
