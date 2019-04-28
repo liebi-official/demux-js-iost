@@ -8,7 +8,7 @@ async function retry(func: () => any, maxNumAttempts: number, waitMs: number): P
   let numAttempts = 1
   while (numAttempts <= maxNumAttempts) {
     try {
-      return func()
+      return await func()
     } catch (err) {
       if (numAttempts - 1 === maxNumAttempts) {
         throw err
