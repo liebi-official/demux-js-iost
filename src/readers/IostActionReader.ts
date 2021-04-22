@@ -1,6 +1,6 @@
-import { AbstractActionReader, NotInitializedError } from "demux";
 import request from "request-promise-native";
 import {
+  NotInitializedError,
   RetrieveBlockError,
   RetrieveHeadBlockError,
   RetrieveIrreversibleBlockError,
@@ -9,6 +9,7 @@ import { IostActionReaderOptions } from "../interfaces";
 import { retry } from "../utils";
 import { IostBlock } from "./IostBlock";
 import axios from "axios";
+import { AbstractActionReader } from "./AbstractActionReader";
 
 /**
  * Reads from an IOST node to get blocks of actions.
@@ -45,6 +46,7 @@ export class IostActionReader extends AbstractActionReader {
         numRetries,
         waitTimeMs
       );
+
       return blockNum;
     } catch (err) {
       throw new RetrieveHeadBlockError();
@@ -74,9 +76,33 @@ export class IostActionReader extends AbstractActionReader {
     }
   }
 
-  /**
-   * Returns a promise for a `IostBlock`.
-   */
+  // /**
+  //  * Returns a promise for a `IostBlock`.
+  //  */
+  // public async getBlock(
+  //   blockNumber: number,
+  //   numRetries: number = 3000,
+  //   waitTimeMs: number = 250
+  // ): Promise<IostBlock> {
+  //   try {
+  //     const block = await retry(
+  //       async () => {
+  //         const rawBlock = await request.get({
+  //           url: `${this.iostEndpoint}/getBlockByNumber/${blockNumber}/true`,
+  //           json: true,
+  //         });
+  //         return new IostBlock(rawBlock);
+  //       },
+  //       numRetries,
+  //       waitTimeMs
+  //     );
+
+  //     return block;
+  //   } catch (err) {
+  //     throw new RetrieveBlockError();
+  //   }
+  // }
+
   public async getBlock(
     blockNumber: number,
     numRetries: number = 3000,
@@ -85,39 +111,25 @@ export class IostActionReader extends AbstractActionReader {
     try {
       const block = await retry(
         async () => {
-          const rawBlock = await request.get({
-            url: `${this.iostEndpoint}/getBlockByNumber/${blockNumber}/true`,
-            json: true,
-          });
-          return new IostBlock(rawBlock);
-        },
-        numRetries,
-        waitTimeMs
-      );
-
-      return block;
-    } catch (err) {
-      throw new RetrieveBlockError();
-    }
-  }
-
-  public async getRawBlock(
-    blockNumber: number,
-    numRetries: number = 3000,
-    waitTimeMs: number = 250
-  ): Promise<any> {
-    try {
-      const block = await retry(
-        async () => {
-          return await await axios.get(
+          let rawBlock = await await axios.get(
             `${this.iostEndpoint}/getRawBlockByNumber/${blockNumber}/true`
           );
+
+          const rawBlock2 = await await axios.get(
+            `${this.iostEndpoint}/getBlockByNumber/${blockNumber}/true`
+          );
+
+          rawBlock.data.block.head.hash = rawBlock2.data.block.hash;
+          rawBlock.data.block.head.previousBlockHash =
+            rawBlock2.data.block.parent_hash;
+
+          return rawBlock.data;
         },
         numRetries,
         waitTimeMs
       );
 
-      return block;
+      return new IostBlock(block);
     } catch (err) {
       throw new RetrieveBlockError();
     }

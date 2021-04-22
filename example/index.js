@@ -1,20 +1,18 @@
-const { IostActionReader } = require("demux-iost")
-const { BaseActionWatcher } = require("demux")
-const IostActionHandler = require("./IostActionHandler")
-const handlerVersion = require("./handlerVersions/v1")
+const { IostActionReader } = require("../dist/readers");
+const { BaseActionWatcher } = require("demux");
+const IostActionHandler = require("./IostActionHandler");
+const handlerVersion = require("./handlerVersions/v1");
 
-
-const actionHandler = new IostActionHandler([handlerVersion])
+const actionHandler = new IostActionHandler([handlerVersion]);
 
 const actionReader = new IostActionReader({
   startAtBlock: 0,
   onlyIrreversible: false,
-  iostEndpoint: 'https://api.iost.io'
-})
+  iostEndpoint: "https://api.iost.io",
+});
 
-const actionWatcher = new BaseActionWatcher(actionReader, actionHandler, 250)
+console.log("Here is before watch");
+const actionWatcher = new BaseActionWatcher(actionReader, actionHandler);
+console.log("Here is after watch");
 
-actionWatcher.watch()
-
-
-
+actionWatcher.watch();

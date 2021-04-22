@@ -10,3 +10,5 @@ yarn-error.log*
 # Editor files
 .idea/
 .vscode/
+
+dist/
