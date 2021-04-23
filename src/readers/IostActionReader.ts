@@ -76,33 +76,6 @@ export class IostActionReader extends AbstractActionReader {
     }
   }
 
-  // /**
-  //  * Returns a promise for a `IostBlock`.
-  //  */
-  // public async getBlock(
-  //   blockNumber: number,
-  //   numRetries: number = 3000,
-  //   waitTimeMs: number = 250
-  // ): Promise<IostBlock> {
-  //   try {
-  //     const block = await retry(
-  //       async () => {
-  //         const rawBlock = await request.get({
-  //           url: `${this.iostEndpoint}/getBlockByNumber/${blockNumber}/true`,
-  //           json: true,
-  //         });
-  //         return new IostBlock(rawBlock);
-  //       },
-  //       numRetries,
-  //       waitTimeMs
-  //     );
-
-  //     return block;
-  //   } catch (err) {
-  //     throw new RetrieveBlockError();
-  //   }
-  // }
-
   public async getBlock(
     blockNumber: number,
     numRetries: number = 3000,

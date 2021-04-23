@@ -82,12 +82,14 @@ export abstract class AbstractActionReader implements ActionReader {
       this.log.info(
         "Action Reader was not initialized before started, so it is being initialized now"
       );
+
       await this.initialize();
     }
 
     this.log.debug("Getting last irreversible block number...");
     const lastIrreversibleStart = Date.now();
     this.lastIrreversibleBlockNumber = await this.getLastIrreversibleBlockNumber();
+
     const lastIrreversibleTime = Date.now() - lastIrreversibleStart;
     this.log.debug(
       `Got last irreversible block number: ${this.lastIrreversibleBlockNumber} (${lastIrreversibleTime}ms)`
@@ -114,6 +116,7 @@ export abstract class AbstractActionReader implements ActionReader {
       } else {
         this.logForkDetected(unvalidatedBlockData, expectedHash, actualHash);
         await this.resolveFork();
+
         blockMeta.isNewBlock = true;
         blockMeta.isRollback = true;
         // Reset for safety, as new fork could have less blocks than the previous fork
@@ -158,14 +161,8 @@ export abstract class AbstractActionReader implements ActionReader {
   public async seekToBlock(blockNumber: number): Promise<void> {
     this.log.debug(`Seeking to block ${blockNumber}...`);
 
-    console.log("I'm in seekToBlock: ", blockNumber);
-
     const seekStart = Date.now();
-    console.log("before getLatestNeededBlockNumber");
-
     this.headBlockNumber = await this.getLatestNeededBlockNumber();
-
-    console.log("after getLatestNeededBlockNumber: ", this.headBlockNumber);
 
     if (blockNumber < this.startAtBlock) {
       throw new ImproperStartAtBlockError(blockNumber, this.startAtBlock);
@@ -265,15 +262,6 @@ export abstract class AbstractActionReader implements ActionReader {
       this.startAtBlock = this.currentBlockNumber + 1;
     }
 
-    console.log("I'm in initBlockState!");
-    console.log(
-      "lastIrreversibleBlockNumber: ",
-      this.lastIrreversibleBlockNumber
-    );
-    console.log("headBlockNumber: ", this.headBlockNumber);
-    console.log("currentBlockNumber: ", this.currentBlockNumber);
-    console.log("startAtBlock: ", this.startAtBlock);
-
     await this.reloadHistory();
   }
 
@@ -325,10 +313,6 @@ export abstract class AbstractActionReader implements ActionReader {
   }
 
   private async reloadHistory(maxTries = 10) {
-    console.log("I'm in reloadHistory");
-
-    console.log("-------currentBlockNumber: ", this.currentBlockNumber);
-
     if (this.currentBlockNumber === 0) {
       this.blockHistory = [];
       this.currentBlockData = defaultBlock;
@@ -343,15 +327,10 @@ export abstract class AbstractActionReader implements ActionReader {
       return;
     }
 
-    console.log("-------blockHistory: ", this.blockHistory);
-    console.log("-------currentBlockData: ", this.currentBlockData);
-
     let historyRange = this.range(
       this.lastIrreversibleBlockNumber,
       this.currentBlockNumber + 1
     );
-
-    console.log("-------historyRange: ", historyRange);
 
     if (historyRange.length <= 1) {
       historyRange = [this.currentBlockNumber - 1, this.currentBlockNumber];
@@ -366,8 +345,6 @@ export abstract class AbstractActionReader implements ActionReader {
           blockNumber,
           "reloading history"
         );
-
-        console.log("-------historyBlock: ", historyBlock);
 
         if (this.blockHistory.length === 0) {
           this.blockHistory.push(historyBlock);

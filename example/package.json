@@ -1,6 +1,6 @@
 {
   "name": "demux-iost-example",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,7 +11,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "demux": "^4.0.0",
-    "demux-iost": "^1.0.2"
+    "demux-js-iost": "^2.0.0"
   }
 }

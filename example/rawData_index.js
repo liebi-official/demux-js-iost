@@ -11,8 +11,8 @@ function main() {
 }
 
 async function printRawBlock(reader) {
-  let blkInfo = await reader.getRawBlock(130099971);
-  console.log("info: ", blkInfo.data);
+  let blkInfo = await reader.getBlock(130099971);
+  console.log("info: ", blkInfo);
 }
 
 main();

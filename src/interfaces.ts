@@ -90,3 +90,121 @@ export interface ActionReader {
   seekToBlock(blockNumber: number): Promise<void>;
   readonly info: ReaderInfo;
 }
+
+export interface ActionHandler {
+  handleBlock(nextBlock: NextBlock, isReplay: boolean): Promise<number | null>;
+  initialize(): Promise<void>;
+  readonly info: HandlerInfo;
+}
+
+export interface HandlerInfo {
+  lastProcessedBlockNumber: number;
+  lastProcessedBlockHash: string;
+  lastIrreversibleBlockNumber: number;
+  handlerVersionName: string;
+  isReplay?: boolean;
+  effectRunMode?: EffectRunMode;
+  numberOfRunningEffects?: number;
+  effectErrors?: string[];
+}
+
+export enum EffectRunMode {
+  All = "all",
+  OnlyImmediate = "onlyImmediate",
+  OnlyDeferred = "onlyDeferred",
+  None = "none",
+}
+
+export interface ActionHandlerOptions extends LogOptions {
+  effectRunMode?: EffectRunMode;
+  maxEffectErrors?: number;
+  validateBlocks?: boolean;
+}
+
+export type CurriedEffectRun = (
+  currentBlockNumber: number,
+  immediate?: boolean
+) => Promise<void>;
+
+export interface DeferredEffects {
+  [blockNumber: number]: CurriedEffectRun[];
+}
+
+export interface Effect extends ActionListener {
+  run: StatelessActionCallback;
+  deferUntilIrreversible?: boolean;
+  onRollback?: StatelessActionCallback;
+}
+
+export interface ActionListener {
+  actionType: string;
+}
+
+export type StatelessActionCallback = (
+  payload: any,
+  blockInfo: BlockInfo,
+  context: any
+) => void | Promise<void>;
+
+export interface EffectsInfo {
+  numberOfRunningEffects: number;
+  effectErrors: string[];
+}
+
+export interface HandlerVersion {
+  versionName: string;
+  updaters: Updater[];
+  effects: Effect[];
+}
+
+export interface Updater extends ActionListener {
+  apply: ActionCallback;
+  revert?: ActionCallback;
+}
+
+export type ActionCallback = (
+  state: any,
+  payload: any,
+  blockInfo: BlockInfo,
+  context: any
+) => void | string | Promise<void> | Promise<string>;
+
+export interface IndexState {
+  blockNumber: number;
+  lastIrreversibleBlockNumber: number;
+  blockHash: string;
+  handlerVersionName: string;
+  isReplay: boolean;
+}
+
+export interface VersionedAction {
+  action: Action;
+  handlerVersionName: string;
+}
+
+export interface ActionWatcherOptions extends LogOptions {
+  pollInterval?: number;
+  velocitySampleSize?: number;
+}
+
+export interface DemuxInfo {
+  watcher: WatcherInfo;
+  handler: HandlerInfo;
+  reader: ReaderInfo;
+}
+
+export interface WatcherInfo {
+  indexingStatus: IndexingStatus;
+  error?: Error;
+  currentBlockVelocity: number;
+  currentBlockInterval: number;
+  maxBlockVelocity: number;
+}
+
+export enum IndexingStatus {
+  Initial = "initial",
+  Indexing = "indexing",
+  Pausing = "pausing",
+  Paused = "paused",
+  Stopped = "stopped",
+}

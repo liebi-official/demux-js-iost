@@ -25,7 +25,7 @@
  *   In this example, we keep a history of the entire state at every block, and load it when called.
  */
 
-const { AbstractActionHandler } = require("demux");
+const { AbstractActionHandler } = require("demux-js-iost");
 
 // Initial state
 let state = {
@@ -64,12 +64,12 @@ class IostActionHandler extends AbstractActionHandler {
   }
 
   async updateIndexState(stateObj, block, isReplay, handlerVersionName) {
-    // console.log("****************block*******************");
-    // console.log(block);
-    // console.log("****************************************");
+    console.log("****************block*******************");
+    console.log(block);
+    console.log("****************************************");
 
-    stateObj.indexState.blockNumber = block.blockInfo.blockNumber;
-    stateObj.indexState.blockHash = block.blockInfo.blockHash;
+    stateObj.indexState.blockNumber = block.block.blockInfo.blockNumber;
+    stateObj.indexState.blockHash = block.block.blockInfo.blockHash;
     stateObj.indexState.isReplay = isReplay;
     stateObj.indexState.handlerVersionName = handlerVersionName;
   }
