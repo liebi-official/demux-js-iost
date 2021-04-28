@@ -1,0 +1,21 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "yarn build:interfaces && polkadot-dev-build-ts",
+    "build:interfaces": "yarn generate:defs && yarn generate:meta",
+    "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package @bifrost-finance/types/interfaces --input ./packages/types/src/interfaces",
+    "generate:meta": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --package @bifrost-finance/types/interfaces --endpoint ./packages/types/bifrost.json --output ./packages/types/src/interfaces --strict"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@polkadot/api": "^3.1.1",
+    "@polkadot/keyring": "^3.6.1",
+    "@polkadot/util": "^3.6.1",
+    "@types/node": "^14.11.8"
+  }
+}
