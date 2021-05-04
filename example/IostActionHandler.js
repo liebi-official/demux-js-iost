@@ -41,7 +41,7 @@ var api;
 
 async function proveAction(iostAction, trx_id, head, headers) {
   console.log(iostAction)
-  console.log(head)
+  console.log(trx_id)
 
   const keyring = new Keyring({ type: "sr25519" });
   const alice = keyring.addFromUri("//Alice", { name: "Alice default" });
@@ -49,9 +49,25 @@ async function proveAction(iostAction, trx_id, head, headers) {
   const result = await api.tx.bridgeIost
       .proveAction(iostAction, trx_id, head, headers)
       .signAndSend(alice);
-  // return 
+
   // console.log("Execute proveAction result:", u8aToHex(result))
   console.log("Execute proveAction result:", result);
+}
+
+async function changeSchedule(block, block_headers,  producers) {
+  console.log("Calling changeSchedule:")
+  console.log(producers)
+  console.log(block)
+
+  const keyring = new Keyring({ type: "sr25519" });
+  const alice = keyring.addFromUri("//Alice", { name: "Alice default" });
+
+  const result = await api.tx.bridgeIost
+      .changeSchedule(block, block_headers, producers)
+      .signAndSend(alice);
+  
+  // console.log("Execute changeSchedule result:", u8aToHex(result))
+  console.log("Execute changeSchedule result:", result);
 }
 
 // Initial state
@@ -68,23 +84,6 @@ let state = {
 
 const stateHistory = {};
 const stateHistoryMaxLength = 300;
-
-const bridge_prove_action = {
-  block_number: 0,
-  action: {},
-  state: 0,
-  trx_id: '',
-  block: {},
-  block_list: []
-};
-
-const bridge_change_schedule = {
-  block_number: 0,
-  producers: [],
-  state: 0,
-  block: {},
-  block_list: []
-};
 
 const block_index_max_size = 512;
 
@@ -152,8 +151,8 @@ class IostActionHandler extends AbstractActionHandler {
     for (const action of block.block.actions) {
       if ("vote_producer.iost/stat" === action.type) {
         console.log("****************block*******************");
-        console.log(action)
-        console.log(action.payload.content)
+        console.log(action.payload)
+
         bridge_change_schedule_index.push({
           block_number: block_number,
           producers: parse_producers(action.payload.content),
@@ -165,24 +164,23 @@ class IostActionHandler extends AbstractActionHandler {
       }
       if ("token.iost/transfer" === action.type) {
         let content = action.payload.content;
+        
         if (content.length > 3 && (content[2] === 'bifrost' || content[1] === 'bifrost')){
-          console.log(content);
+          console.log(action.payload);
+          let data = JSON.stringify(action.payload.content);
+          bridge_prove_action_index.push({
+            trx_id: action.payload.transactionId,
+            block_number: block.block.blockInfo.blockNumber,
+            action: {
+              contract: "token.iost",
+              action_name: "transfer",
+              data: data,
+            },
+            state: 0,
+            block: parse_block(block.block.blockInfo),
+            block_list: []
+          });
         }
-
-        console.log(parse_block(block.block.blockInfo));
-        bridge_prove_action_index.push({
-          trx_id: action.payload.transactionId,
-          block_number: block.block.blockInfo.blockNumber,
-          action: {
-            contract: "token.iost",
-            action_name: "transfer",
-            data:
-              action.payload.content,
-          },
-          state: 0,
-          block: parse_block(block.block.blockInfo),
-          block_list: []
-        })
       }
     }
 
@@ -198,17 +196,13 @@ class IostActionHandler extends AbstractActionHandler {
       if (bridge_prove_action.state == 0 && bridge_prove_action.block_list.length >= 108) {
         bridge_prove_action.state = 1;
 
-        const keyring = new Keyring({ type: "sr25519" });
-        const alice = keyring.addFromUri("//Alice", { name: "Alice default" });
-
-        const result = await proveAction({
+        await proveAction({
           contract: "token.iost",
           action_name: "transfer",
           data: bridge_prove_action.action.data,
               // '["iost","lispczz5","bifrost","1","5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY@bifrost:IOST"]',
-      }, bridge_prove_action.trx_id, bridge_prove_action.block, bridge_prove_action.block_list)
+        }, bridge_prove_action.trx_id, bridge_prove_action.block, bridge_prove_action.block_list)
 
-        console.log(result);
         console.log("Calling bridge_prove_action end ------------- ");
         console.log(bridge_prove_action.block_list.length);
         bridge_prove_action.state = 2;
@@ -231,6 +225,13 @@ class IostActionHandler extends AbstractActionHandler {
       }
       if (bridge_change_schedule.state == 0 && bridge_change_schedule_index.block_list.length >= 108) {
         bridge_change_schedule.state = 1;
+
+        const result = await changeSchedule(bridge_change_schedule.block, bridge_change_schedule.block_list, producers)
+
+        console.log(result);
+        console.log("Calling bridge_change_schedule end ------------- ");
+        console.log(bridge_change_schedule.block_list.length);
+        bridge_change_schedule.state = 2;
       }
     }
 
