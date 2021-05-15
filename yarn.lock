@@ -948,6 +948,18 @@ delegates@^1.0.0:
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
   integrity sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=
 
+demux-js-iost@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/demux-js-iost/-/demux-js-iost-2.0.1.tgz#a34d8f69b1b6a22fcbb1ca30c2c8395a89f3fe56"
+  integrity sha512-jWCK+a2Ki4UnzwFIaDIAtfpT413yEmg4Lv1hEUYs4ExQ5VxMIEH2cAUJBFYHRe4x6x9wuLgyxDu9p6K1r3llUw==
+  dependencies:
+    "@types/express" "^4.16.1"
+    axios "^0.21.1"
+    bunyan "^1.8.12"
+    node-fetch "^2.3.0"
+    request "^2.87.0"
+    request-promise-native "^1.0.5"
+
 detect-indent@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-4.0.0.tgz#f76d064352cdf43a1cb6ce619c4ee3a9475de208"
